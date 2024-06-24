@@ -1,0 +1,707 @@
+/***************** modification générale */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Cinzel', serif;
+}
+
+/* Supprimer le fond des colonnes spécifiées */
+.column-bg-clear {
+  background: none !important; /* Supprimer le fond */
+  border: none !important; /* Supprimer la bordure */
+  box-shadow: none !important; /* Supprimer l'effet d'ombre */
+}
+
+
+/************************** barre de navigation */ 
+
+nav {
+  display: flex;
+  height: 80px;
+  width: 100%;
+  background: #800020; /* Couleur bordeaux */
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 60px 0 100px;
+  flex-wrap: wrap;
+  position: fixed; /* Fixer la barre de navigation en haut */
+  top: 0;
+  z-index: 1000; /* S'assurer que la barre de navigation reste au-dessus */
+}
+
+nav .logo {
+  color: #fff; /* Écriture blanche */
+  font-size: 25px;
+  font-weight: 600;
+}
+
+nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+}
+
+nav ul li {
+  margin: 0 5px;
+}
+
+nav ul li a {
+  color: #fff; /* Écriture blanche */
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 500;
+  padding: 8px 15px;
+  border-radius: 5px;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+}
+
+nav ul li a.active,
+nav ul li a#about-link.active {
+  color: #fff;
+  background: none;
+}
+
+nav ul li a:hover,
+nav ul li a:active {
+  color: #800020;
+  background: white; 
+}
+
+nav ul li a#about-link {
+  color: #fff; /* Assurez-vous que le lien About est blanc */
+}
+
+nav ul li a#about-link:hover,
+nav ul li a#about-link:active {
+  color: #800020; /* Assurez-vous que le lien About change de couleur comme le lien Home */
+  background: white; /* Appliquez le changement de fond */
+}
+
+nav .menu-btn i {
+  color: #fff; /* Écriture blanche */
+  font-size: 22px;
+  cursor: pointer;
+  display: none;
+}
+
+input[type="checkbox"] {
+  display: none;
+}
+
+@media (max-width: 1000px) {
+  nav {
+    padding: 0 40px 0 50px;
+  }
+}
+
+@media (max-width: 920px) {
+  nav .menu-btn i {
+    display: block;
+  }
+
+  #click:checked ~ .menu-btn i:before {
+    content: "\f00d";
+  }
+
+  nav ul {
+    position: fixed;
+    top: 80px;
+    left: -100%;
+    background: #800020;
+    height: 100vh;
+    width: 100%;
+    text-align: center;
+    display: block;
+    transition: all 0.3s ease;
+  }
+
+  #click:checked ~ ul {
+    left: 0;
+  }
+
+  nav ul li {
+    width: 100%;
+    margin: 40px 0;
+  }
+
+  nav ul li a {
+    width: 100%;
+    margin-left: -100%;
+    display: block;
+    font-size: 20px;
+    transition: 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+
+  #click:checked ~ ul li a {
+    margin-left: 0px;
+  }
+
+  nav ul li a.active,
+  nav ul li a:hover {
+    background: #800020;
+    color: white;
+  }
+}
+
+.content {
+  margin-top: 100px; /* Ajouter de la marge pour descendre les éléments */
+  text-align: center;
+  position: relative;
+  z-index: 1; /* Assurer que le contenu est au-dessus de l'arrière-plan */
+}
+
+
+/******************************** panel d'input des valeurs */
+
+.input-label { /* Modifier les textes '  Température (°C) SO2a (mg/L) TAV (%) ' */
+  color: white; 
+  font-size: 1.2em;
+  margin-bottom: 20px; 
+}
+
+
+.input-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px; /* Réduire l'espace entre les panels */
+  margin-top: 30px;
+  z-index: 2; /* Assurer que les inputs sont au-dessus du contenu */
+}
+
+.input-panel {
+  flex: 1;
+  min-width: 250px; /* Augmenter la largeur minimale */
+  max-width: 350px; /* Augmenter la largeur maximale */
+  padding: 15px; /* Réduire le padding pour rapprocher les inputs */
+  border: 1px solid #800020;
+  border-radius: 5px;
+  background-color: #800020;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+  z-index: 2; /* Assurer que les panels sont au-dessus du contenu */
+}
+
+.input-panel:hover { /* effet 3D quand on passe la souris */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.input-panel input { /* modifier l'entrée des valeurs */
+  width: 100%;
+  text-align: center; 
+  font-size: 1.9em; 
+  padding: 20px; 
+  margin-left: 10px; 
+}
+
+.input-panel input:focus {
+  border-color: #800020; /* Couleur bordeaux pour le focus */
+  outline: none;
+  box-shadow: 0 0 5px #800020;
+}
+
+.input-logo {
+  display: block;
+  margin: 10px auto; /* Centrer l'image sous l'input */
+  max-width: 50px; /* Ajustez cette valeur pour la taille souhaitée */
+  height: auto;
+}
+
+
+/***************************************************************** carrée */
+/* CSS pour les carrés de résultat */
+
+.result-square {
+  width: 100%;
+  max-width: 150px;
+  height: 150px;
+  margin: 10px;
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  text-align: center;
+  font-size: 1.2em; 
+  color: black; 
+  transition: box-shadow 0.3s ease;
+}
+
+.result-square.green {
+  background-color: #ccffcc;
+}
+
+.result-square.orange {
+  background-color: #ffcc99;
+}
+
+.highlighted {
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+}
+.flex-container {
+  margin-top: 80px; 
+}
+
+/**** triangle */
+
+.flex-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px; /* Adjust the gap between the result boxes */
+  flex-wrap: wrap; /* Allow wrapping in case of small screens */
+  margin-bottom: 60px; /* Ajouter une marge en dessous pour abaisser la section suivante */
+}
+
+/* Wrapper for each result box and its associated elements */
+.result-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* résultats des conseils */
+.result-square {
+  width: 150px;
+  height: 150px;
+  margin: 10px;
+  display: flex; /* Use flexbox to center the text */
+  align-items: center; /* Center vertically */
+  justify-content: center; /* Center horizontally */
+  text-align: center;
+  font-size: 1.2em; /* Text size */
+  color: black; /* Text color */
+  transition: box-shadow 0.3s ease;
+}
+
+.result-square.green {
+  background-color: #ccffcc;
+}
+
+.result-square.orange {
+  background-color: #ffcc99;
+}
+
+.highlighted {
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+}
+
+/* CSS for triangles and advice boxes */
+#triangle-container-green, #triangle-container-orange {
+  display: none; /* Hidden by default */
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-top: 20px solid #ccffcc; /* Green color */
+  margin: 0 auto; /* Center the triangle */
+}
+
+#advice-box-green, #advice-box-orange {
+  display: none; /* Hidden by default */
+  background-color: #ccffcc; /* Green background */
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 5px;
+  text-align: center;
+  max-width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#triangle-container-orange {
+  border-top: 20px solid #ffcc99; /* Orange color */
+}
+
+#advice-box-orange {
+  background-color: #ffcc99; /* Orange background */
+}
+
+
+
+
+
+
+/***************************************************************** boutton */
+/* CSS pour les boutons */
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.predict-button {
+  background-color: #800020; /* Couleur bordeaux */
+  color: white; /* Texte en blanc */
+  border: none;
+  padding: 15px 30px;
+  font-size: 1.5em; /* Taille du texte augmentée */
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.predict-button:hover {
+  background-color: #66001a; /* Couleur bordeaux plus foncée au survol */
+  color : white; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Empêcher le bouton de devenir grisé */
+.predict-button:active, .predict-button:focus {
+  background-color: #800020; /* Couleur bordeaux */
+  color: white; /* Texte en blanc */
+}
+
+@media (max-width: 768px) {
+  .predict-button {
+    font-size: 1.2em; /* Taille du texte réduite pour les petits écrans */
+    padding: 10px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .predict-button {
+    font-size: 1em; /* Taille du texte encore plus réduite pour les très petits écrans */
+    padding: 8px 15px;
+  }
+}
+
+/* CSS pour l'animation du bouton (optionnelle) */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+.animate-shake {
+  animation: shake 0.5s;
+}
+
+
+
+
+
+
+
+
+
+
+
+/********************************************* historique */
+
+/* design du titre "historique"  */
+
+
+h1 {
+  position: relative;
+  padding: 0;
+  margin: 0;
+  font-family: 'Cinzel', serif;
+  font-weight: 300;
+  font-size: 40px;
+  color: #080808;
+  -webkit-transition: all 0.4s ease 0s;
+  -o-transition: all 0.4s ease 0s;
+  transition: all 0.4s ease 0s;
+  margin-top: 90px;
+}
+
+h1 span {
+  display: block;
+  font-size: 0.5em;
+  line-height: 1.3;
+  margin-top: 40px;
+}
+
+h1 em {
+  font-style: normal;
+  font-weight: 600;
+  margin-top: 40px;
+}
+
+
+.seven h1 {
+    text-align: center;
+    font-size: 30px;
+    font-weight: 300;
+    color: #222;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    display: grid;
+    grid-template-columns: 1fr max-content 1fr;
+    grid-template-rows: 27px 0;
+    grid-gap: 20px;
+    align-items: center;
+    margin-top: 60px; 
+}
+
+.seven h1:after,
+.seven h1:before {
+    content: " ";
+    display: block;
+    border-bottom: 1px solid #c50000;
+    border-top: 1px solid #c50000;
+    height: 5px;
+    background-color: #f8f8f8;
+}
+
+
+/* l'historique en générale */
+
+.history-container {
+  width: 200%; /* Élargir la largeur à 100% de la largeur de la page */
+  max-width: 1900px; /* Définir une largeur maximale pour le conteneur */
+  margin-left: auto; /* Centrer horizontalement */
+  margin-right: auto; /* Centrer horizontalement */
+  padding: 90px;
+  text-align: center;
+  margin-top: 100px; 
+}
+
+
+
+.history-container h3 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 2em;
+  font-family: 'Cinzel', serif;
+}
+
+.table-wrapper {
+  display: flex;
+  justify-content: flex-end; /* Décaler le tableau vers la droite */
+}
+
+.history-container .table-responsive {
+  display: inline-block;
+  width: 80%; /* Réduire la largeur pour décaler à droite */
+  margin-left: auto; /* Décaler le tableau vers la droite */
+  overflow-x: auto; /* Permettre le défilement horizontal */
+}
+
+.history-container table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 100px; /* descendre l'historique */
+}
+
+.history-container th, .history-container td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: left; /* Garder le texte aligné à gauche à l'intérieur des cellules */
+  min-width: 150px;
+}
+
+.history-container th {
+  background-color: #800020;
+  color: white;
+}
+
+.history-container tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+
+.delete-btn {
+  cursor: pointer;
+  color: red;
+}
+
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.pagination-controls .btn {
+  margin: 5px;
+}
+
+#pagination-info {
+  margin: 5px;
+}
+
+.clear-history {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.clear-button {
+  background-color: #800020; /* Couleur bordeaux */
+  color: white; /* Texte en blanc */
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.clear-button:hover {
+  background-color: #b3002d;
+}
+
+.clear-button:active, .clear-button:focus {
+  background-color: #800020; /* Couleur bordeaux */
+  color: white; /* Texte en blanc */
+}
+
+/* Media queries pour améliorer la responsivité sur petits écrans */
+@media (max-width: 600px) {
+  .history-container {
+    padding: 10px;
+    width: 100%; /* Prendre toute la largeur disponible sur petits écrans */
+  }
+  
+  .history-container table {
+    font-size: 12px;
+  }
+  
+  .pagination-controls {
+    flex-direction: column;
+  }
+  
+  .pagination-controls .btn {
+    margin: 5px 0;
+  }
+  
+  #pagination-info {
+    margin: 5px 0;
+  }
+}
+
+/* CSS pour les boutons de pagination */
+/* CSS pour les boutons de pagination */
+.pagination-controls .btn {
+  background-color: #800020; /* Couleur bordeaux */
+  color: white; /* Texte en blanc */
+  border: none;
+  padding: 10px;
+  border-radius: 50%; /* Rond */
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5em; /* Taille de l'icône */
+  width: 40px; /* Taille du bouton */
+  height: 40px; /* Taille du bouton */
+}
+
+.pagination-controls .btn:hover {
+  background-color: #66001a; /* Couleur bordeaux plus foncée au survol */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.pagination-controls .btn:active, .pagination-controls .btn:focus {
+  background-color: #800020; /* Couleur bordeaux */
+  color: white; /* Texte en blanc */
+}
+
+/* Media queries pour améliorer la responsivité sur petits écrans */
+@media (max-width: 600px) {
+  .pagination-controls {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .pagination-controls .btn {
+    font-size: 1.2em; /* Taille de l'icône réduite pour les petits écrans */
+    width: 30px; /* Taille du bouton réduite */
+    height: 30px; /* Taille du bouton réduite */
+    margin: 5px 0;
+  }
+  
+  #pagination-info {
+    margin: 10px 0;
+  }
+}
+
+
+
+
+
+/*************************** rubrique about */
+
+#about {
+  padding: 0.25rem;
+  max-width: 900px;
+  margin: 5em auto 0 auto;  /* Ajouter une marge supérieure plus grande */
+  counter-reset: hr; 
+  font-family: 'Gafata';
+  color: black;
+  line-height: 1.5;
+}
+#about:after {
+  content: '';
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  box-shadow: 0 0 60px 30px #fff;
+}
+#about:before {
+  position: fixed;
+  height: 30px;
+  line-height: 30px;
+  top: 0;
+  right: 0;
+  left: 0;
+  text-align: center;
+  z-index: 2;
+  background: rgba(0, 0, 0, 0.1);
+}
+#about h1 {
+  text-align: center;
+  font-family: 'Montez';
+  color: #870202s;
+}
+#about p {
+  transition: all 0.5s;
+  font-size: 1.2em;
+}
+#about p:hover {
+  color: #870202;
+}
+#about hr {
+  counter-increment: hr;
+  text-align: center;
+  position: relative;
+  background: none;
+  margin: 5em 1em;
+  border: 0;
+  border-top: dashed 1px #dddddd;
+}
+#about hr:before {
+  content: 'Chapter: ' counter(hr);
+  font-family: 'Montez';
+  font-size: 30px;
+  background: white;
+  width: 50%;
+  margin-left: -25%;
+  height: 30px;
+  line-height: 30px;
+  margin-top: -15px;
+  position: absolute;
+  color: #870202;
+}
+#about hr:after {
+  animation: spin 25s infinite linear;
+  position: absolute;
+  margin-left: -71px;
+  margin-top: -71px;
+  opacity: 0.05;
+  line-height: 0;
+  content: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAI4AAACOCAYAAADn/TAIAAANx0lEQVR4nO2de5RXVRXHPzPDYwR5qKOiaJGioK);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
