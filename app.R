@@ -2,7 +2,7 @@ library(shiny)
 library(shinyjs)
 library(caret) 
 library(randomForest)
-
+library(openxlsx)
 rf_model <- readRDS("www/rf_model_best_params.rds")
 
 load_history <- function() {
@@ -56,6 +56,11 @@ ui <- fluidPage(
   ),
   div(id = "home", class = "content",
       fluidRow(
+        column(12, align = "center",
+               tags$h1(class = "special", "Cet outil a été réalisé sur la base des travaux de l’Institut Rhodanien et de l’ICV et ne s’applique qu’aux vins secs."),
+               div(class = "line-decor-container", div(class = "line-decor"))  
+        ),
+      
         column(12, div(class = "input-container",
                        div(class = "input-panel",
                            tags$label(class = "input-label", "Température (°C)"),
@@ -63,7 +68,7 @@ ui <- fluidPage(
                            tags$img(src = "logo_temperature.png", class = "input-logo")
                        ),
                        div(class = "input-panel",
-                           tags$label(class = "input-label", "SO2a (mg/L)"),
+                           tags$label(class = "input-label", "SO2 actif (mg/L)"),
                            numericInput("so2a", label = NULL, value = NA, step = 0.01),
                            tags$img(src = "logo_so2a.png", class = "input-logo")
                        ),
@@ -85,12 +90,22 @@ ui <- fluidPage(
                    div(class = "result-wrapper",
                        div(class = "result-square green", id = "green-square", "Risque faible"),
                        div(id = "triangle-container-green"),
-                       div(id = "advice-box-green", "voicie les conseillesvoicie les conseillesvoicie les conseillesvoicie les conseillesvoicie les conseillesvoicie les conseillesvoicie les conseillesvoicie les conseillesvoicie les conseilles")
+                       div(id = "advice-box-green", "Même avec un risque faible, Maintenez des pratiques d'hygiène strictes et réalisez des mises au propre régulières pour prévenir toute contamination potentielle.",
+                           tags$br(),tags$br(),
+                           "Maintenir la cave à la température la plus basse possible (si possible <14°C)",
+                           tags$br(),tags$br(),
+                           "Effectuez des contrôles microbiologiques périodiques pour confirmer l'absence de germes d'altérations et assurer la stabilité microbiologique du vin."
+                           )
                    ),
                    div(class = "result-wrapper",
                        div(class = "result-square orange", id = "orange-square", "Risque fort"),
                        div(id = "triangle-container-orange"),
-                       div(id = "advice-box-orange", "voicie les conseillesvoicie les conseillesvoicie les conseillesvoicie les conseillesvoicie les conseillesvoicie les conseillesvoicie les conseillesvoicie les conseillesvoicie les conseilles")
+                       div(id = "advice-box-orange", "il est impératif d'augmenter la concentration de SO2 actif pour combattre les microorganismes nuisibles. Utilisez le calculateur de SO2 actif pour déterminer la quantité exacte nécessaire.",
+                           tags$a(href = "https://www.vignevin-occitanie.com/outils-en-ligne/so2-actif-ou-moleculaire/", target = "_blank", "calculateur SO2 actif"), 
+                           tags$br(),
+                           tags$br(),
+                           "Abaissez la température de la cave autant que possible pour ralentir la croissance des micro-organismes. Une température inférieure à 14°C est idéale pour minimiser les risques d'altération du vin."
+                       )
                    )
                )
         ),
@@ -111,49 +126,52 @@ ui <- fluidPage(
                              actionButton("nextPage", tags$i(class = "fas fa-chevron-right"), class = "btn pagination-btn")
                          ),
                          div(class = "clear-history",
-                             actionButton("clearHistory", "Vider l'historique", class = "clear-button")
+                             actionButton("clearHistory", "Vider l'historique", class = "clear-button"),
+                             downloadButton("downloadData", label = NULL, icon = icon("download", class = "fa-download"), class = "download-button")
+                             
                          )
                      )
                  )
           )
         )
       )
-  ),
+),
   
   div(id = "about", class = "content",
       HTML("
-        <h1>Mode d'emploi</h1> <br>             
-  
-  <p>Entrer les données :  </p>
-  
-  <p>Température (°C) :    <br>
-      Saisissez la température actuelle en degrés Celsius dans le champ à gauche. </p>
-  
-  <p> SO2a (mg/L) : <br>
-  Entrez la concentration de SO2 libre en milligrammes par litre dans le champ au centre.
-  </p>
-  
-
-  <p> TAV (%) : <br>
-  Indiquez le taux d'alcool par volume en pourcentage dans le champ à droite. 
-  </p>
-  
-  <p> Le résultat s'affichera en dessous : <br>
-
-   - Un risque faible implique que le taux de brettanomyces est assez raisonnable pour ne pas altérer la qualité du vin <br>
-   - Un risque fort implique que le taux de brettanomyces est trop élevé et présente donc un risque d'altération de la qualité du vin <br>
-  </p>
-        <hr>
-        <h1>Informations</h1> <br>
-        <p> Qu'est ce que Brettanomyces </p>
-        <p> Brettanomyces, souvent appelée Brett, est une levure qui peut contaminer le vin et affecter son goût et son arôme.Cette levure est connue pour produire des composés phénoliques indésirables qui peuvent donner des arômes de cuir, de sueur de cheval, ou de plastique brûlé.</p> 
-        <p> Pourquoi est-elle importante </p>
-        <p> Bien que certains vins bénéficient d'une petite présence de Brettanomyces, une contamination excessive peut ruiner le vin. </p>
-        <p> Comment se propage -t-elle </p>
-        <p> Brettanomyces peut se trouver dans les barriques en bois, les équipements de vinification et même dans l'air des caves. Elle prolifère particulièrement bien dans des conditions chaudes et avec une faible présence de SO2 libre. </p>
-        <hr>
-      ")
+      <h1>Mode d'emploi</h1> <br>
+      <p> - A l’aide de votre bulletin d’analyse, renseignez les champs concernant le SO2 actif (mg/L) et le TAV (%) de votre cuve <br>
+         - Indiquez également la température (°C) actuelle de votre chai. <br>
+         - Cliquez sur Prédire.</p><br>
+      <p>Le résultat indique le risque d’une matrice à être phénolée en fonction des paramètres œnologiques.</p>
+      <p>Un risque faible indique que le risque de production de phénols volatils est faible si ces paramètres œnologiques sont maintenus.</p>
+      <p>Un risque fort indique que le risque de production de phénols volatils est élevé. Cette cuve nécessite donc une surveillance accrue.</p>
+      <hr>
+      <h1>Informations</h1> <br>
+      <p><strong>Les phénols volatils et leur impact sur le vin</strong></p>
+      <p>Les principaux phénols volatils responsables d’altérations dans les vins sont l’éthyl-4-phénol (4EP) et l’éthyl-4-gaïacol. Ces molécules sont responsables du caractère phénolé et animal et donnent des arômes désagréables au vin, tels que des notes fumées, épicées ou de sueur de cheval. Le seuil de perception des phénols volatils est de l’ordre de 450 µg/L, au-delà duquel le profil aromatique ainsi que la qualité des vins sont fortement impactés.</p>
+      <p><strong>La levure Brettanomyces : un risque majeur</strong></p>
+      <p>Le principal microorganisme impliqué dans la production de ces phénols volatils est la levure Brettanomyces. Des études ont montré que cette levure peut se développer dans des conditions drastiques, telles que des concentrations d’alcool relativement élevées, des valeurs de pH faibles et un environnement pauvre en nutriments. De plus, ce microorganisme est capable de persister dans des environnements difficiles, notamment en restant dans un état viable mais non cultivable (VNC) et en adhérant aux surfaces.</p>
+      <p><strong>Fonctionnalités et portée de l'outil</strong></p>
+       
+      <p>Cet outil permet de :<br>
+      <p>Tester toutes les cuves dès la fin des fermentations afin de mettre en évidence les cuves à risque pour resserrer le suivi analytique.<br>
+      <p>Prédire l’évolution du risque en modifiant les paramètres instables (SO2, T°C).<br>
+      Déterminer le paramètre à modifier pour les cuves à risques.</p>
+      <hr>
+    ")
+  ),
+  # Modal pour l'identifiant de la cuve
+  tags$div(id = "modalOverlay"), # Add this line
+  tags$div(id = "cuveModal",
+           tags$h2("Entrez le numéro de la cuve"),
+           textInput("cuve_id", label = NULL, placeholder = "Numéro de la cuve"),
+           div(class = "modal-buttons",
+               actionButton("submit_cuve_id", "Soumettre"),
+               actionButton("cancel_cuve_id", "Annuler")
+           )
   )
+  
 )
 
 server <- function(input, output, session) {
@@ -168,13 +186,27 @@ server <- function(input, output, session) {
     temp <- input$temperature
     so2a <- input$so2a
     tav <- input$tav
-    user_ip <- input$user_ip
     
     if (is.na(temp) || is.na(so2a) || is.na(tav) || temp < -50 || temp > 50 || so2a < 0 || so2a > 100 || tav < 0 || tav > 100) {
       session$sendCustomMessage(type = 'shakeButton', message = list(id = "predict"))
       output$validation_message <- renderText({ "Veuillez entrer des valeurs valides." })
       output$results <- renderText({ "" })
       session$sendCustomMessage(type = 'handlePrediction', message = list(risk_label = ""))
+    } else {
+      # Show the modal to ask for the cuve ID
+      session$sendCustomMessage(type = 'showModal', message = list())
+    }
+  })
+  
+  observeEvent(input$submit_cuve_id, {
+    temp <- input$temperature
+    so2a <- input$so2a
+    tav <- input$tav
+    user_ip <- input$user_ip
+    cuve_id <- input$cuve_id
+    
+    if (cuve_id == "") {
+      session$sendCustomMessage(type = 'shakeButton', message = list(id = "cuve_id"))
     } else {
       new_data <- data.frame(T = temp, SO2a = so2a, TAV = tav)
       prediction <- predict(rf_model, new_data)
@@ -184,6 +216,7 @@ server <- function(input, output, session) {
       
       rv$history <- rbind(rv$history, data.frame(Date = format(Sys.time(), "%d/%m/%Y"),
                                                  IP = user_ip,
+                                                 CuveID = cuve_id,
                                                  Température = temp,
                                                  SO2a = so2a,
                                                  TAV = tav,
@@ -196,6 +229,7 @@ server <- function(input, output, session) {
       }
       
       session$sendCustomMessage(type = 'handlePrediction', message = list(risk_label = risk_label))
+      session$sendCustomMessage(type = 'hideModal', message = list())
     }
   })
   
@@ -214,6 +248,7 @@ server <- function(input, output, session) {
   observeEvent(input$clearHistory, {
     rv$history <- data.frame(Date = character(),
                              IP = character(),
+                             CuveID = character(),
                              Température = numeric(),
                              SO2a = numeric(),
                              TAV = numeric(),
@@ -234,7 +269,7 @@ server <- function(input, output, session) {
       })
       return(history_to_show)
     } else {
-      return(data.frame(Date = character(), Température = numeric(), SO2a = numeric(), TAV = numeric(), Risque = character(), Delete = character()))
+      return(data.frame(Date = character(), CuveID = character(), Température = numeric(), SO2a = numeric(), TAV = numeric(), Risque = character(), Delete = character()))
     }
   }, sanitize.text.function = function(x) x, rownames = TRUE, striped = TRUE, hover = TRUE, bordered = TRUE)
   
@@ -259,6 +294,19 @@ server <- function(input, output, session) {
     invalidateLater(500, session)
     session$sendCustomMessage(type = "updateHistory", message = list(history = rv$history))
   })
+  
+  output$downloadData <- downloadHandler(
+    filename = function() {
+      paste("historique-", Sys.Date(), ".xlsx", sep = "")
+    },
+    content = function(file) {
+      history_no_ip <- rv$history[, -which(names(rv$history) == "IP")]
+      openxlsx::write.xlsx(history_no_ip, file)
+    }
+  )
+  
 }
 
+
 shinyApp(ui = ui, server = server)
+
