@@ -52,24 +52,27 @@ nav ul li {
 nav ul li a {
   color: #fff; /* Écriture blanche */
   text-decoration: none;
-  font-size: 18px;
-  font-weight: 500;
+  font-size: 25px;
+  font-weight: bold; /* Mettre en gras */
   padding: 8px 15px;
-  border-radius: 5px;
   letter-spacing: 1px;
   transition: all 0.3s ease;
+  border-radius: 9px; /* Angles droits */
 }
 
 nav ul li a.active,
 nav ul li a#about-link.active {
   color: #fff;
   background: none;
+  font-weight: bold; /* Mettre en gras */
 }
 
 nav ul li a:hover,
 nav ul li a:active {
   color: #800020;
-  background: white; 
+  background: white;
+  border-radius: 0; /* Angles droits */
+  font-weight: bold; /* Mettre en gras */
 }
 
 nav ul li a#about-link {
@@ -80,6 +83,8 @@ nav ul li a#about-link:hover,
 nav ul li a#about-link:active {
   color: #800020; /* Assurez-vous que le lien About change de couleur comme le lien Home */
   background: white; /* Appliquez le changement de fond */
+  border-radius: 0; /* Angles droits */
+  font-weight: bold; /* Mettre en gras */
 }
 
 nav .menu-btn i {
@@ -145,6 +150,8 @@ input[type="checkbox"] {
   nav ul li a:hover {
     background: #800020;
     color: white;
+    border-radius: 0; /* Angles droits */
+    font-weight: bold; /* Mettre en gras */
   }
 }
 
@@ -154,6 +161,73 @@ input[type="checkbox"] {
   position: relative;
   z-index: 1; /* Assurer que le contenu est au-dessus de l'arrière-plan */
 }
+
+/******************************** texte vins sec */
+
+
+h1.special {
+  font-size: 30px;
+  font-family: Cinzel;
+  line-height: 1.5em;
+  letter-spacing: 6px;
+  font-weight: 900;
+  font-style: normal;
+  text-align: center;
+  color: black;
+  position: relative;
+  margin-bottom: 2rem;
+  margin-top: 2rem;
+  max-width: 1200px; /* Limiter la largeur du texte */
+  margin-left: auto; /* Centrer horizontalement */
+  margin-right: auto; /* Centrer horizontalement */
+}
+
+h1.special::before, h1.special::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+}
+
+.line-decor-container {
+  position: relative;
+  margin-bottom: 4rem; /* Ajouter une marge inférieure pour séparer du contenu suivant */
+  margin-top: 4rem;    /* Ajouter une marge supérieure pour séparer du contenu précédent */
+  height: 3em;         /* Hauteur relative pour le conteneur */
+}
+
+.line-decor::before { /*losange*/
+  display: block;
+  content: '';
+  width: 12px;
+  height: 12px;
+  background-color: #800020;
+  position: absolute;
+  transform: rotate(45deg) translateX(-50%);
+  left: 50%;
+  top: 1.7em; /* Utiliser une unité relative pour ajuster */
+  
+}
+
+.line-decor::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 780px;
+  height: 3px;
+  background: 
+    linear-gradient(to right,
+      #800020 0%,
+      #800020 45%,
+      rgba(0,0,0,0) 45%,
+      rgba(0,0,0,0) 55%,
+      #800020 55%,
+      #800020 100%);
+  top: 2em; /* Utiliser une unité relative pour ajuster */
+}
+
+
 
 
 /******************************** panel d'input des valeurs */
@@ -341,11 +415,12 @@ input[type="checkbox"] {
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  width: 200px; /* Définir une largeur fixe */
 }
 
 .predict-button:hover {
   background-color: #66001a; /* Couleur bordeaux plus foncée au survol */
-  color : white; 
+  color: white;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
@@ -355,17 +430,20 @@ input[type="checkbox"] {
   color: white; /* Texte en blanc */
 }
 
+/* Désactiver les règles de réduction pour petits écrans */
 @media (max-width: 768px) {
   .predict-button {
-    font-size: 1.2em; /* Taille du texte réduite pour les petits écrans */
-    padding: 10px 20px;
+    font-size: 1.5em; /* Taille du texte non réduite */
+    padding: 15px 30px; /* Taille du padding non réduite */
+    width: 200px; /* Largeur fixe maintenue */
   }
 }
 
 @media (max-width: 480px) {
   .predict-button {
-    font-size: 1em; /* Taille du texte encore plus réduite pour les très petits écrans */
-    padding: 8px 15px;
+    font-size: 1.5em; /* Taille du texte non réduite */
+    padding: 15px 30px; /* Taille du padding non réduite */
+    width: 200px; /* Largeur fixe maintenue */
   }
 }
 
@@ -406,7 +484,7 @@ h1 {
   -webkit-transition: all 0.4s ease 0s;
   -o-transition: all 0.4s ease 0s;
   transition: all 0.4s ease 0s;
-  margin-top: 90px;
+  margin-top: 50px;
 }
 
 h1 span {
@@ -449,19 +527,16 @@ h1 em {
 }
 
 
-/* l'historique en générale */
 
+/* l'historique en générale */
 .history-container {
-  width: 200%; /* Élargir la largeur à 100% de la largeur de la page */
-  max-width: 1900px; /* Définir une largeur maximale pour le conteneur */
+  width: 100%; /* Élargir la largeur à 100% de la largeur de la page */
   margin-left: auto; /* Centrer horizontalement */
   margin-right: auto; /* Centrer horizontalement */
-  padding: 90px;
+  padding: 20px;
   text-align: center;
-  margin-top: 100px; 
+  margin-top: 50px; /* Ajuster cette valeur pour remonter l'historique */
 }
-
-
 
 .history-container h3 {
   text-align: center;
@@ -472,27 +547,45 @@ h1 em {
 
 .table-wrapper {
   display: flex;
-  justify-content: flex-end; /* Décaler le tableau vers la droite */
+  justify-content: center; /* Aligner le tableau au centre */
+}
+
+.history-container {
+  width: 100%; /* Prendre toute la largeur disponible */
+  max-width: 1200px; /* Largeur maximale */
+  margin: 0 auto; /* Centrer horizontalement */
+  padding: 20px;
+  text-align: center;
+  margin-top: 50px; /* Ajuster cette valeur pour remonter l'historique */
+}
+
+.history-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+  margin-top: 50px;
 }
 
 .history-container .table-responsive {
   display: inline-block;
-  width: 80%; /* Réduire la largeur pour décaler à droite */
-  margin-left: auto; /* Décaler le tableau vers la droite */
+  width: 100%;
   overflow-x: auto; /* Permettre le défilement horizontal */
+  margin: 0 auto 0 5%;
 }
 
 .history-container table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 100px; /* descendre l'historique */
+  margin-top: 20px;
 }
 
 .history-container th, .history-container td {
   padding: 10px;
   border: 1px solid #ddd;
-  text-align: left; /* Garder le texte aligné à gauche à l'intérieur des cellules */
-  min-width: 150px;
+  text-align: left;
+  min-width: 150px; /* Permettre aux cellules de garder une largeur minimale */
 }
 
 .history-container th {
@@ -503,7 +596,6 @@ h1 em {
 .history-container tr:nth-child(even) {
   background-color: #f2f2f2;
 }
-
 
 .delete-btn {
   cursor: pointer;
@@ -533,8 +625,8 @@ h1 em {
 }
 
 .clear-button {
-  background-color: #800020; /* Couleur bordeaux */
-  color: white; /* Texte en blanc */
+  background-color: #800020;
+  color: white;
   border: none;
   padding: 10px 20px;
   border-radius: 5px;
@@ -543,84 +635,65 @@ h1 em {
 }
 
 .clear-button:hover {
-  background-color: #b3002d;
+  background-color: #66001a;
+  color: white;
 }
 
 .clear-button:active, .clear-button:focus {
-  background-color: #800020; /* Couleur bordeaux */
-  color: white; /* Texte en blanc */
+  background-color: #800020;
+  color: white;
 }
 
 /* Media queries pour améliorer la responsivité sur petits écrans */
-@media (max-width: 600px) {
+@media (max-width: 1200px) {
+  .history-container {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 992px) {
   .history-container {
     padding: 10px;
-    width: 100%; /* Prendre toute la largeur disponible sur petits écrans */
   }
-  
+
+  .history-container th, .history-container td {
+    padding: 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  .history-container {
+    padding: 8px;
+  }
+
+  .history-container table {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 576px) {
+  .history-container {
+    padding: 5px;
+  }
+
   .history-container table {
     font-size: 12px;
   }
-  
+
   .pagination-controls {
     flex-direction: column;
   }
-  
+
   .pagination-controls .btn {
     margin: 5px 0;
   }
-  
+
   #pagination-info {
     margin: 5px 0;
   }
 }
 
-/* CSS pour les boutons de pagination */
-/* CSS pour les boutons de pagination */
-.pagination-controls .btn {
-  background-color: #800020; /* Couleur bordeaux */
-  color: white; /* Texte en blanc */
-  border: none;
-  padding: 10px;
-  border-radius: 50%; /* Rond */
-  cursor: pointer;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5em; /* Taille de l'icône */
-  width: 40px; /* Taille du bouton */
-  height: 40px; /* Taille du bouton */
-}
 
-.pagination-controls .btn:hover {
-  background-color: #66001a; /* Couleur bordeaux plus foncée au survol */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.pagination-controls .btn:active, .pagination-controls .btn:focus {
-  background-color: #800020; /* Couleur bordeaux */
-  color: white; /* Texte en blanc */
-}
-
-/* Media queries pour améliorer la responsivité sur petits écrans */
-@media (max-width: 600px) {
-  .pagination-controls {
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .pagination-controls .btn {
-    font-size: 1.2em; /* Taille de l'icône réduite pour les petits écrans */
-    width: 30px; /* Taille du bouton réduite */
-    height: 30px; /* Taille du bouton réduite */
-    margin: 5px 0;
-  }
-  
-  #pagination-info {
-    margin: 10px 0;
-  }
-}
 
 
 
@@ -658,7 +731,7 @@ h1 em {
 }
 #about h1 {
   text-align: center;
-  font-family: 'Montez';
+  font-family: 'Cinzel', serif;;
   color: #870202s;
 }
 #about p {
@@ -704,4 +777,139 @@ h1 em {
   to {
     transform: rotate(360deg);
   }
+}
+
+
+
+/*********************** fenetre pop up cuve */
+#modalOverlay {
+  display: none; /* Masquer l'overlay par défaut */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Fond noir transparent */
+  z-index: 999; /* Assurer que l'overlay est au-dessus de tout le reste */
+}
+
+#cuveModal {
+  display: none; /* Masquer la modale par défaut */
+  position: fixed;
+  z-index: 1000; /* Assurer que la modale est au-dessus de tout le reste */
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 500px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px; /* Bord légèrement arrondi */
+  text-align: center;
+  box-sizing: border-box;
+}
+
+#cuveModal input {
+  width: calc(100% - 40px); /* Réduire la largeur pour les marges internes */
+  padding: 10px;
+  margin-left: 110px; /* Centrer l'input horizontalement */
+  display: block; /* Assurer que l'input prenne toute la largeur */
+  text-align: center; /* Centrer l'écriture de l'input */
+  border: 1px solid #ccc; /* Contour gris */
+  box-sizing: border-box;
+  outline: none; /* Enlever le contour par défaut */
+}
+
+#cuveModal input:focus {
+  border-color: #ccc; /* Contour gris lorsqu'on clique sur l'input */
+  box-shadow: none; /* Enlever l'effet de shadow */
+}
+
+#cuveModal .modal-buttons {
+  display: flex;
+  justify-content: center; /* Centrer les boutons horizontalement */
+  gap: 10px; /* Espacer les boutons */
+  margin-top: 20px; /* Espacement au-dessus des boutons */
+  flex-wrap: wrap;
+}
+
+#cuveModal .modal-buttons button {
+  background-color: #800020; /* Fond bordeaux */
+  color: white; /* Écriture blanche */
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  flex: 1;
+  max-width: 120px;
+  box-sizing: border-box;
+}
+
+#cuveModal .modal-buttons button:hover {
+  background-color: #66001a; /* Fond bordeaux plus foncé au survol */
+}
+
+@media (max-width: 768px) {
+  #cuveModal {
+    width: 90%; /* Augmenter la largeur de la modale pour les petits écrans */
+    padding: 15px; /* Réduire le padding pour les petits écrans */
+  }
+
+  #cuveModal input {
+    width: calc(100% - 20px); /* Réduire la largeur pour les marges internes */
+    padding: 8px;
+  }
+
+  #cuveModal .modal-buttons {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  #cuveModal .modal-buttons button {
+    max-width: none;
+  }
+}
+
+
+
+
+
+/******************************************** bouton excel */
+
+.download-button {
+  background-color: #800020; /* Fond bordeaux */
+  color: white; /* Écriture blanche */
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 10px; /* Espacement entre les boutons */
+  position: relative;
+}
+
+.download-button:hover {
+  background-color: #66001a; /* Fond bordeaux plus foncé au survol */
+}
+
+.download-button:hover .fa-download {
+  color: white; /* Garder l'icône blanche au survol */
+}
+
+#loader {
+  border: 6px solid #f3f3f3; /* Light grey */
+  border-top: 6px solid #800020; /* Bordeaux */
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 2s linear infinite;
+  display: none; /* Hide the loader by default */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
