@@ -166,7 +166,7 @@ input[type="checkbox"] {
 
 
 h1.special {
-  font-size: 30px;
+  font-size: 20px;
   font-family: Cinzel;
   line-height: 1.5em;
   letter-spacing: 6px;
@@ -177,7 +177,7 @@ h1.special {
   position: relative;
   margin-bottom: 2rem;
   margin-top: 2rem;
-  max-width: 1200px; /* Limiter la largeur du texte */
+  max-width: 1300px; /* Limiter la largeur du texte */
   margin-left: auto; /* Centrer horizontalement */
   margin-right: auto; /* Centrer horizontalement */
 }
@@ -228,7 +228,132 @@ h1.special::before, h1.special::after {
 }
 
 
+/******************************************** description outil */
 
+
+.olcards,
+.olcards * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.olcards {
+  list-style: none;
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+  --cardsGap: 1rem;
+  gap: var(--cardsGap);
+  padding-bottom: var(--cardsGap);
+}
+
+.olcards li {
+  display: flex;
+  color: white;
+  --labelOffset: 1rem;
+  --arrowClipSize: 1.5rem;
+  margin-top: var(--labelOffset);
+}
+
+.olcards li .content {
+  background-color: var(--cardColor);
+  --inlinePadding: 1em;
+  --boxPadding: 0.5em;
+  display: grid;
+  padding: var(--boxPadding) calc(var(--inlinePadding) + var(--arrowClipSize))
+    var(--boxPadding) calc(var(--inlinePadding) + var(--labelOffset));
+  grid-template-areas:
+    "icon title"
+    "icon text";
+  gap: 0.25em 1em;
+  clip-path: polygon(
+    0 0,
+    calc(100% - var(--arrowClipSize)) 0,
+    100% 50%,
+    calc(100% - var(--arrowClipSize)) 100%,
+    calc(100% - var(--arrowClipSize)) calc(100% + var(--cardsGap)),
+    0 calc(100% + var(--cardsGap))
+  );
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.olcards li .content::before {
+  content: "";
+  position: absolute;
+  width: var(--labelOffset);
+  height: var(--labelOffset);
+  background: var(--cardColor);
+  left: 0;
+  bottom: 0;
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+}
+
+.olcards li .icon {
+  grid-area: icon;
+  align-self: center;
+  font-size: 2em;
+}
+
+.olcards li .content .title {
+  grid-area: title;
+  font-size: 1.25em;
+}
+
+.olcards li .content .text {
+  grid-area: text;
+  color: #000; /* Texte en noir */
+}
+
+.title-and-list-container {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem; /* Espace entre le titre et la liste */
+  justify-content: center; /* Centrer horizontalement */
+}
+
+.title-and-list-container h1 {
+  position: relative;
+  margin-right: 0; /* Pas d'espace entre le titre et la liste */
+  text-align: center; /* Centrer le texte */
+  color: black; /* Couleur du texte en noir */
+  z-index: 1; /* S'assurer que le texte est au-dessus du fond */
+  padding: 10px; /* Espacement à l'intérieur du rectangle */
+  width: 200px; /* Largeur fixe du carré */
+  height: 200px; /* Hauteur fixe du carré */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #efe7db; /* Couleur de fond */
+  box-sizing: border-box;
+  border-radius: 0; /* Pas de bordure arrondie */
+  font-size: 24px;
+}
+
+.olcards li:hover .content {
+  transform: scale(1.05); /* Agrandir légèrement */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ajouter une ombre */
+  margin-left: 20px; /* Décaler vers la droite */
+  margin-left: 20px;
+  font-size: 1.1em; /* Agrandir le texte */
+}
+
+@media (max-width: 768px) {
+  .title-and-list-container {
+    flex-direction: column;
+    align-items: center; /* Centrer les éléments pour les petits écrans */
+  }
+
+  .olcards li {
+    margin-left: 0; /* Retirer le décalage pour les petits écrans */
+  }
+
+  .title-and-list-container h1::before {
+    width: 100%; /* Ajuster la largeur du fond pour les petits écrans */
+  }
+}
 
 /******************************** panel d'input des valeurs */
 
@@ -473,6 +598,7 @@ h1.special::before, h1.special::after {
 /* design du titre "historique"  */
 
 
+/* Styles généraux pour les titres */
 h1 {
   position: relative;
   padding: 0;
@@ -484,47 +610,79 @@ h1 {
   -webkit-transition: all 0.4s ease 0s;
   -o-transition: all 0.4s ease 0s;
   transition: all 0.4s ease 0s;
-  margin-top: 50px;
+  margin-top: 100px;
+  text-align: center;
+  text-transform: uppercase;
 }
 
-h1 span {
+/* Pour les titres spécifiques dans la section 'seven' */
+/* Styles généraux pour les titres */
+/* Styles généraux pour les titres */
+h1 {
+  position: relative;
+  padding: 0;
+  margin: 0;
+  font-family: 'Cinzel', serif;
+  font-weight: 300;
+  font-size: 40px;
+  color: #080808;
+  -webkit-transition: all 0.4s ease 0s;
+  -o-transition: all 0.4s ease 0s;
+  transition: all 0.4s ease 0s;
+  margin-top: 20px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+/* Styles spécifiques pour les titres dans la section 'seven' */
+.seven .line-decor-container {
+  position: relative;
+  margin-bottom: 4rem; /* Ajouter une marge inférieure pour séparer du contenu suivant */
+  margin-top: 4rem;    /* Ajouter une marge supérieure pour séparer du contenu précédent */
+  height: 3em;         /* Hauteur relative pour le conteneur */
+}
+
+.line-decor::before { /*losange*/
   display: block;
-  font-size: 0.5em;
-  line-height: 1.3;
-  margin-top: 40px;
+  content: '';
+  width: 12px;
+  height: 12px;
+  background-color: #800020;
+  position: absolute;
+  transform: rotate(45deg) translateX(-50%);
+  left: 50%;
+  top: 1.7em; /* Utiliser une unité relative pour ajuster */
 }
 
-h1 em {
-  font-style: normal;
-  font-weight: 600;
-  margin-top: 40px;
+.line-decor::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 780px;
+  height: 3px;
+  background: 
+    linear-gradient(to right,
+      #800020 0%,
+      #800020 45%,
+      rgba(0,0,0,0) 45%,
+      rgba(0,0,0,0) 55%,
+      #800020 55%,
+      #800020 100%);
+  top: 2em; /* Utiliser une unité relative pour ajuster */
 }
 
-
-.seven h1 {
-    text-align: center;
-    font-size: 30px;
-    font-weight: 300;
-    color: #222;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    display: grid;
-    grid-template-columns: 1fr max-content 1fr;
-    grid-template-rows: 27px 0;
-    grid-gap: 20px;
-    align-items: center;
-    margin-top: 60px; 
+/* Styles pour le texte sous le titre */
+.subtitle {
+  font-size: 18px;
+  font-family: 'Cinzel', serif;
+  font-weight: 300;
+  color: #080808;
+  text-align: center;
+  margin-top: 20px; /* Ajuster cette valeur pour espacer du titre */
 }
 
-.seven h1:after,
-.seven h1:before {
-    content: " ";
-    display: block;
-    border-bottom: 1px solid #c50000;
-    border-top: 1px solid #c50000;
-    height: 5px;
-    background-color: #f8f8f8;
-}
 
 
 
@@ -559,14 +717,7 @@ h1 em {
   margin-top: 50px; /* Ajuster cette valeur pour remonter l'historique */
 }
 
-.history-container {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-  text-align: center;
-  margin-top: 50px;
-}
+
 
 .history-container .table-responsive {
   display: inline-block;
@@ -581,11 +732,13 @@ h1 em {
   margin-top: 20px;
 }
 
+
 .history-container th, .history-container td {
   padding: 10px;
   border: 1px solid #ddd;
   text-align: left;
-  min-width: 150px; /* Permettre aux cellules de garder une largeur minimale */
+  min-width: 120px; /* Permettre aux cellules de garder une largeur minimale */
+  font-size: 1.3em;
 }
 
 .history-container th {
@@ -912,4 +1065,32 @@ h1 em {
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+
+
+/************************* bouton revenir en haut */
+
+#backToTop {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #800020;
+  color: white;
+  border: none;
+  padding: 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 1000; /* S'assurer que le bouton est au-dessus de tout le reste */
+}
+
+#backToTop:hover {
+  background: #66001a; /* Fond bordeaux plus foncé au survol */
+}
+
+@media (min-width: 768px) {
+  #backToTop {
+    display: block; /* Afficher le bouton pour les écrans de 768px et plus */
+  }
 }
