@@ -58,3 +58,39 @@ Shiny.addCustomMessageHandler('updateHistory', function(message) {
     Shiny.setInputValue('delete_row', this.id, {priority: "event"});
   });
 });
+
+Shiny.addCustomMessageHandler('showModal', function(message) {
+  $('#modalOverlay').show();
+  $('#cuveModal').show();
+});
+
+Shiny.addCustomMessageHandler('hideModal', function(message) {
+  $('#modalOverlay').hide();
+  $('#cuveModal').hide();
+});
+
+$(document).on('click', '#submit_cuve_id', function() {
+  $('#modalOverlay').hide();
+  $('#cuveModal').hide();
+});
+
+$(document).on('click', '#cancel_cuve_id', function() {
+  $('#modalOverlay').hide();
+  $('#cuveModal').hide();
+});
+
+// Code pour le bouton de retour en haut
+
+$(window).scroll(function() {
+  if ($(this).scrollTop() > 200) { // Afficher le bouton après avoir fait défiler 200px
+    $('#backToTop').fadeIn();
+  } else {
+    $('#backToTop').fadeOut();
+  }
+});
+
+$('#backToTop').click(function() {
+  $('html, body').animate({scrollTop: 0}, 800); // 800ms pour l'animation de défilement
+  return false;
+});
+
