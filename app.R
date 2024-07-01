@@ -1,8 +1,9 @@
 library(shiny)
 library(shinyjs)
-library(caret) 
+library(caret)
 library(randomForest)
 library(openxlsx)
+
 rf_model <- readRDS("www/rf_model_best_params.rds")
 
 load_history <- function() {
@@ -28,6 +29,7 @@ ui <- fluidPage(
   includeScript("www/script.js"),
   includeCSS("www/styles.css"),
   tags$head(
+    tags$div(id = "backToTop", tags$i(class = "fas fa-arrow-up")),
     tags$link(rel = "stylesheet", href = "https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap"),
     tags$script(src = "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"),
     tags$script(
@@ -57,10 +59,35 @@ ui <- fluidPage(
   div(id = "home", class = "content",
       fluidRow(
         column(12, align = "center",
-               tags$h1(class = "special", "Cet outil a été réalisé sur la base des travaux de l’Institut Rhodanien et de l’ICV et ne s’applique qu’aux vins secs."),
-               div(class = "line-decor-container", div(class = "line-decor"))  
+               tags$h1(class = "special", "Cet outil a été réalisé sur la base des travaux de l’Institut Rhodanien et de l’ICV et ne s’applique qu’aux vins secs. Les travaux ont été réalisés en vin rouge avec une contamination en Brettanomyces de l’ordre de 10^3 cellules/mL. Ainsi, l’influence des différents facteurs (TAV, SO2 actif et température) sur le développement de la levure Brettanomyces et sa production de phénols volatils a été étudiée."),
+               div(class = "line-decor-container", div(class = "line-decor"))
         ),
-      
+        column(12,
+               div(class = "title-and-list-container",
+               tags$h1("Cet outil permet de :"),
+               tags$ol(class = "olcards",
+                       tags$li(style = "--cardColor:#efe7db",
+                               div(class = "content",
+                                   div(class = "text", "Tester toutes les cuves dès la fin des fermentations afin de mettre en évidence les cuves à risque pour resserrer le suivi analytique.")
+                               )
+                       ),
+                       tags$li(style = "--cardColor:#efe7db",
+                               div(class = "content",
+                                   div(class = "text", "Prédire l’évolution du risque en modifiant les paramètres instables (SO2, T°C).")
+                               )
+                       ),
+                       tags$li(style = "--cardColor:#efe7db",
+                               div(class = "content",
+                                   div(class = "text", "Déterminer le paramètre à modifier pour les cuves à risques.")
+                               )
+                       )
+                  )   
+               ),
+               div(class = "line-decor-container", div(class = "line-decor"))
+        )
+        
+      ),
+      fluidRow(
         column(12, div(class = "input-container",
                        div(class = "input-panel",
                            tags$label(class = "input-label", "Température (°C)"),
@@ -95,7 +122,7 @@ ui <- fluidPage(
                            "Maintenir la cave à la température la plus basse possible (si possible <14°C)",
                            tags$br(),tags$br(),
                            "Effectuez des contrôles microbiologiques périodiques pour confirmer l'absence de germes d'altérations et assurer la stabilité microbiologique du vin."
-                           )
+                       )
                    ),
                    div(class = "result-wrapper",
                        div(class = "result-square orange", id = "orange-square", "Risque fort"),
@@ -115,8 +142,12 @@ ui <- fluidPage(
                  div(align = "center",
                      div(class = "history-container",
                          div(class = "seven",
-                             h1("Historique")
+                             div(class = "line-decor-container", 
+                                 div(class = "line-decor")
+                             )
                          ),
+                         h1(class = "special", "Historique"),
+                         p(class = "subtitle", "Vous pouvez télécharger l'historique au format Excel en cliquant sur l'icône de téléchargement."),
                          div(class = "table-responsive",
                              tableOutput("historyTable")
                          ),
@@ -135,7 +166,7 @@ ui <- fluidPage(
           )
         )
       )
-),
+  ),
   
   div(id = "about", class = "content",
       HTML("
@@ -149,23 +180,17 @@ ui <- fluidPage(
       <hr>
       <h1>Informations</h1> <br>
       <p><strong>Les phénols volatils et leur impact sur le vin</strong></p>
-      <p>Les principaux phénols volatils responsables d’altérations dans les vins sont l’éthyl-4-phénol (4EP) et l’éthyl-4-gaïacol. Ces molécules sont responsables du caractère phénolé et animal et donnent des arômes désagréables au vin, tels que des notes fumées, épicées ou de sueur de cheval. Le seuil de perception des phénols volatils est de l’ordre de 450 µg/L, au-delà duquel le profil aromatique ainsi que la qualité des vins sont fortement impactés.</p>
+      <p>Les principaux phénols volatils responsables d’altérations dans les vins sont l’éthyl-4-phénol (4EP) et l’éthyl-4-gaïacol. Ces molécules sont responsables du caractère phénolé et animal et donnent des arômes désagréables au vin, tels que des notes fumées, épicées ou de sueur de cheval. Le seuil de perception des phénols volatils est de l’ordre de 450 ug/L, au-delà duquel le profil aromatique ainsi que la qualité des vins sont fortement impactés.</p>
       <p><strong>La levure Brettanomyces : un risque majeur</strong></p>
       <p>Le principal microorganisme impliqué dans la production de ces phénols volatils est la levure Brettanomyces. Des études ont montré que cette levure peut se développer dans des conditions drastiques, telles que des concentrations d’alcool relativement élevées, des valeurs de pH faibles et un environnement pauvre en nutriments. De plus, ce microorganisme est capable de persister dans des environnements difficiles, notamment en restant dans un état viable mais non cultivable (VNC) et en adhérant aux surfaces.</p>
-      <p><strong>Fonctionnalités et portée de l'outil</strong></p>
-       
-      <p>Cet outil permet de :<br>
-      <p>Tester toutes les cuves dès la fin des fermentations afin de mettre en évidence les cuves à risque pour resserrer le suivi analytique.<br>
-      <p>Prédire l’évolution du risque en modifiant les paramètres instables (SO2, T°C).<br>
-      Déterminer le paramètre à modifier pour les cuves à risques.</p>
-      <hr>
+      
     ")
   ),
   # Modal pour l'identifiant de la cuve
   tags$div(id = "modalOverlay"), # Add this line
   tags$div(id = "cuveModal",
-           tags$h2("Entrez le numéro de la cuve"),
-           textInput("cuve_id", label = NULL, placeholder = "Numéro de la cuve"),
+           tags$h2("Entrez le nom de la cuve"),
+           textInput("cuve_id", label = NULL, placeholder = "nom de la cuve"),
            div(class = "modal-buttons",
                actionButton("submit_cuve_id", "Soumettre"),
                actionButton("cancel_cuve_id", "Annuler")
@@ -216,7 +241,7 @@ server <- function(input, output, session) {
       
       rv$history <- rbind(rv$history, data.frame(Date = format(Sys.time(), "%d/%m/%Y"),
                                                  IP = user_ip,
-                                                 CuveID = cuve_id,
+                                                 Cuve = cuve_id,
                                                  Température = temp,
                                                  SO2a = so2a,
                                                  TAV = tav,
@@ -248,7 +273,7 @@ server <- function(input, output, session) {
   observeEvent(input$clearHistory, {
     rv$history <- data.frame(Date = character(),
                              IP = character(),
-                             CuveID = character(),
+                             Cuve = character(),
                              Température = numeric(),
                              SO2a = numeric(),
                              TAV = numeric(),
@@ -269,7 +294,7 @@ server <- function(input, output, session) {
       })
       return(history_to_show)
     } else {
-      return(data.frame(Date = character(), CuveID = character(), Température = numeric(), SO2a = numeric(), TAV = numeric(), Risque = character(), Delete = character()))
+      return(data.frame(Date = character(), Cuve = character(), Température = numeric(), SO2a = numeric(), TAV = numeric(), Risque = character(), Delete = character()))
     }
   }, sanitize.text.function = function(x) x, rownames = TRUE, striped = TRUE, hover = TRUE, bordered = TRUE)
   
@@ -309,4 +334,3 @@ server <- function(input, output, session) {
 
 
 shinyApp(ui = ui, server = server)
-
